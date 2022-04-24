@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 random-string = "1.0"
+terminal = "0.2.1"
