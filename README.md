@@ -1,5 +1,6 @@
 # memory_rust
 A simple program to help train memory written in blazingly fast rust
+by Sherlly & Light
 
 
 This program has several features:
