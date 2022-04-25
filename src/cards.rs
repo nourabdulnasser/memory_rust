@@ -8,7 +8,6 @@ fn get_input() -> String {
 
     let mut input =String::new();
 
-    // print!("Type in what you memorised!\n");
 
     let _=stdout().flush();
     stdin().read_line(&mut input).expect("Did not enter a correct string");
@@ -37,8 +36,8 @@ pub fn cards_memory(length: usize, time: usize){
 
         let mut rng = rand::thread_rng();
 
-        let rand_index_rank = rng.gen_range(0..ranks.len()-1);
-        let rand_index_suit = rng.gen_range(0..suits.len()-1);
+        let rand_index_rank = rng.gen_range(0..ranks.len());
+        let rand_index_suit = rng.gen_range(0..suits.len());
     
         let rank = ranks[rand_index_rank];
         let suit = suits[rand_index_suit];
@@ -88,7 +87,7 @@ pub fn cards_memory(length: usize, time: usize){
 
     // user prompt
 
-    print!("Type in what you memorised!\n To exit, enter: exit\n");
+    print!("Type in what you memorised!\nTo exit, enter: exit\n");
 
 
 
