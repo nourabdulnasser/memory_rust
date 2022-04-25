@@ -1,4 +1,5 @@
 mod numbers;
+mod cards;
 use std::env;
 fn main() {
     let args: Vec<String> = env::args().collect();
