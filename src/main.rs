@@ -10,4 +10,16 @@ fn main() {
     let amount_of_seconds_per_digits = args[3].parse::<usize>().unwrap();
     numbers::memory_numbers(amount_of_digits,amount_of_seconds_per_digits);
     }
+    
+    /* let args: Vec<_> = env::args().collect();
+
+    if args[1] == "cards" {
+        let  num_cards : usize = args[2].parse().unwrap();
+        let  sec_per_card : usize = args[3].parse().unwrap();
+        cards::cards_memory(num_cards, sec_per_card);
+        //println!("{}", num_cards);
+    } else {
+        println!("a different game");
+    }; */ 
+
 }
