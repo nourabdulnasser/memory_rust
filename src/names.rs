@@ -1,81 +1,70 @@
-use super::api_call;
-use super::input_wrapper;
-use std::{thread};
+use std::{thread, time};
 use terminal::{Clear, Action};
-//use regex //1.4.5
+extern crate fakedata_generator;
+use fakedata_generator::*;
+use super::input_wrapper;
 
-// function for getting a random name
-fn random_name() -> String{
-    let mut api_name_vec: Vec<String> = vec![]; // vector of names extracted from api function
-    let api_name: String = api_call::api_get_request("https://random-data-api.com/api/name/random_name");
-    let api_delimit = regex::Regex::new(r",|:").unwrap(); // delimit characters for easier iteration
-    let api_delimit_vec: Vec<&str> = api_delimit.split(&api_name).collect(); // vector of all elements in api
-    let mut name = "";
-    let mut counter = 0;
+fn get_random_word() -> String{
+    // function  to generate a random word
+    let contents = "squealing ,wide ,secret ,ball ,wholesale ,gaudy ,distance ,notice ,delicate ,nondescript ,abashed ,mice ,momentous ,charge ,vast ,power ,smell ,wander ,vague ,peck ,bad ,sharp ,company ,channel ,sack ,sisters ,grate ,silly ,judicious ,radiate ,marked ,murky ,clear ,admit ,cannon ,handsome ,arm ,walk ,mourn ,work ,nimble ,dress ,juvenile ,cent ,foamy ,tense ,wistful ,hypnotic ,children ,thread ,cowardly ,hungry ,highfalutin ,wakeful ,fairies ,boast ,unarmed ,beginner ,breathe ,celery ,spiffy ,worthless ,jail ,wonder ,serious ,ice ,women ,ignore ,wax ,homely ,disagree ,cactus ,unwritten ,voracious ,avoid ,broken ,suffer ,cellar ,word ,tasteless ,same ,rain ,few ,babies ,entertaining ,complete ,arrive ,hard ,ignore ,talk ,elite ,meaty ,exciting ,undress ,surprise ,tall ,substantial ,mammoth ,rub ,prepare ,saw ,stream ,smell ,crib ,elite ,farm ,snow ,fixed ,famous ,fluttering ,rings ,gorgeous ,alcoholic ,wandering ,exchange ,hook ,cannon ,mass ,close ,gaudy ,late ,sparkle ,dime ,screw ,nonchalant ,careful ,level ,destruction ,earthy ,rush ,obedient ,nostalgic ,statement ,easy ,chicken ,fresh ,top ,wait ,hat ,week ,pack ,remember ,statement ,cagey ,pig ,rhythm ,functional ,periodic ,squirrel ,reminiscent ,quack ,reason ,messy ,brake ,miniature ,late ,juicy ,unused ,quartz ,plan ,damaged ,pest ,punch ,sneaky ,roasted ,inform ,naive ,real ,glove ,morning ,lace ,stupid ,grease ,pricey ,appliance ,ragged ,careful ,color ,vacuous ,invite ,breakable ,roof ,exchange ,month ,loving ,car ,trust ,mark ,poor ,shave ,breathe ,freezing ,cable ,evanescent ,wilderness ,hop ,alleged ,gray ,periodic ,political ,piquant ,used ,cowardly ,search ,playground ,coach ,savory ,scandalous ,valuable ,axiomatic ,burst ,file ,gusty ,uneven ,normal ,pray ,sprout ,trains ,reflective ,imaginary ,delay ,slip ,internal ,please ,leg ,tent ,tickle ,poor ,whispering ,cows ,relieved ,rambunctious ,breath ,undress ,tramp ,flimsy ,guiltless ,glistening ,immense ,greedy ,behavior ,funny ,work ,huge ,children ,electric ,shivering ,smoke ,regular ,hum ,hard-to-find ,boot ,multiply ,chemical ,silent ,quixotic ,pinch ,things ,nondescript ,frighten ,visitor ,early ,violent ,acoustic ,jagged ,impolite ,fuzzy ,wanting ,far ,channel ,adjoining ,cultured ,bore ,bottle ,subsequent ,frogs ,pets ,direction ,expensive ,exciting ,basket ,polish ,sound ,flagrant ,kind ,jelly ,mammoth ,cemetery ,early ,incredible ,employ ,knee ,acrid ,basin ,angle ,efficacious ,regret ,exuberant ,downtown ,brake ,coherent ,pink ,spicy ,gainful ,secretive ,gigantic ,request ,argument ,beneficial ,quiver ,roof ,orange ,basin ,chalk ,great ,nosy ,eight ,narrow ,ludicrous ,sigh ,trucks ,itch ,end ,flippant ,miscreant ,care ,slow ,appreciate ,alike ,mature ,sassy ,dog ,wacky ,forgetful ,volcano ,introduce ,absurd ,tested ,observant ,tested ,sock ,ship ,kind ,man ,plantation ,strange ,glow ,thankful ,interest ,drab ,excellent ,pump ,chance ,hate ,live ,enthusiastic ,cast ,green ,spiffy ,nonchalant ,hobbies ";
 
-    // trying to convert elements of api_delimit_vec into String
-    for element in &api_delimit_vec{
-        if element == &"\"first_name\""
-        {
-            name = &api_delimit_vec[counter+1];  // using let to bind
-        }
-        counter = counter +1 ;
-    } 
-    // println!("{:?}",api_name_vec); // test
-    return name.to_string().replace("\"","");
+
+    let random_word = gen_enum(contents.to_string());
+    random_word
 }
 
-pub fn memory_names(length: usize, time: usize){
+
+
+
+
+
+
+
+
+
+pub fn memory_words(length: usize,sleep_per_word: usize) {
+
     let terminal = terminal::stdout();
-    let mut random_names: &str = "";
-    let mut names_vec: Vec<String> = vec![];  // vector of clean random names
-    let mut random_names_vec: Vec<String> = vec![];
+    let mut word_set: Vec<String> = Vec::with_capacity(length);
+    let sleep_time = sleep_per_word*length;
+    let sleep_time_u64: u64 = sleep_time as u64;
 
-    // loop to get {number_of_names} random names
-    for number in 0..length
-    {
-        random_names_vec.push(random_name());
-        // println!("{:?}", random_names_vec); // test
+    // for every word the user wants, generate a random word and push onto the word_set vector
+    for _i in 0..length {
+        let a_new_word = get_random_word();
+        word_set.push(a_new_word);
     }
 
-    // wait for {time} seconds
-    let mem_time_u64 = (length*time).try_into().unwrap();
-    let mem_dur = std::time::Duration::from_secs(mem_time_u64);
-    
-    println!("Memorise this:\n{:?}\nYou have {} seconds.", random_names_vec, length*time);
-    
-    thread::sleep(mem_dur);
-    
-    terminal.act(Action::ClearTerminal(Clear::All)).map_err(|err| println!("{:?}", err)).ok();
-    
-        
 
-    // user prompt
-    print!("Type in what you memorised!\nTo exit, enter: exit\n");
+    let random_word_string: String = word_set.into_iter().collect();
+    // turn random word vector into a string
 
-    // comparing input and random_names_vec
-    let mut counter_check_ans = 0;
+    println!("{}",random_word_string);
+    println!("you have {} amount of second(s) to memorise these words",sleep_time);
+    thread::sleep(time::Duration::from_secs(sleep_time_u64));
 
-    for _item in &random_names_vec {
-        let user_input = input_wrapper::get_input();
-        if user_input.to_uppercase() == random_names_vec[counter_check_ans].to_uppercase(){
-            println!("Bravo! You got {} right!\n", random_names_vec[counter_check_ans]);
-        } else if user_input == "exit" {
-            break;
-        } else {
-            println!("Nay :( The right answer is {}.\n", random_names_vec[counter_check_ans]);
-        };
 
-    counter_check_ans = counter_check_ans +1;
+     terminal.act(Action::ClearTerminal(Clear::All)).map_err(|err| println!("{:?}", err)).ok();
 
-    }
+     println!("okay print what you memorised");
 
-    println!("end");
- 
+
+     let mut guess_trim: String = input_wrapper::get_input().to_owned();
+
+     guess_trim.push_str(" ");
+
+
+     if guess_trim == random_word_string {
+
+         println!("well done you got it correct, the words were {}",random_word_string);
+
+     }
+     else {
+         println!("wow you're trash, the words were {}",random_word_string);
+
+
+     }
+
+
+
 }
-
-
-
-    
-
-
