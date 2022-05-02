@@ -22,7 +22,7 @@ pub fn memory_objects(length: usize,sleep_per_object: usize) {
     // for every object the user wants, generate a random object and push onto the object_set vector
     for _i in 0..length {
         let a_new_object = get_random_object();
-        object_set.push(a_new_object);
+        object_set.push(a_new_object+"- ");
     }
 
 
