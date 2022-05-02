@@ -26,6 +26,7 @@ fn random_name() -> String{
 }
 
 pub fn memory_names(length: usize, time: usize){
+    let terminal = terminal::stdout();
     let mut random_names: &str = "";
     let mut names_vec: Vec<String> = vec![];  // vector of clean random names
     let mut random_names_vec: Vec<String> = vec![];
@@ -34,7 +35,7 @@ pub fn memory_names(length: usize, time: usize){
     for number in 0..length
     {
         random_names_vec.push(random_name());
-        println!("{:?}", random_names_vec); // test
+        // println!("{:?}", random_names_vec); // test
     }
 
     // wait for {time} seconds
